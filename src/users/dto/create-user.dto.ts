@@ -3,9 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto {
   @ApiProperty()
   id: string;
-  @ApiProperty()
+  // Set required to false if a field will not be required
+  @ApiProperty({ required: false })
   createdAt: Date;
-  @ApiProperty()
+  @ApiProperty({ required: false })
   updatedAt: Date;
   @ApiProperty()
   email: string;
