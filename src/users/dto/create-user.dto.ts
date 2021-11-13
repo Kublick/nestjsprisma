@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   id: string;
   // Set required to false if a field will not be required
   @ApiProperty({ required: false })
