@@ -5,14 +5,12 @@ import { UsersService } from 'src/users/users.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
-export const jwtSecret = 'mysecretfile';
-
 @Module({
   imports: [
     UsersService,
     PassportModule,
     JwtModule.register({
-      secret: jwtSecret,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '4h' },
     }),
   ],

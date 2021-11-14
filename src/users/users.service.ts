@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -18,8 +18,9 @@ export class UsersService {
     const find = await this.prismaService.user.findUnique({
       where: { email: email },
     });
+    console.log(find);
     if (!find) {
-      return new BadRequestException('A field is incorrect');
+      throw new UnauthorizedException('user with this email doesnt exist');
     }
     return find;
   }
