@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   HttpCode,
@@ -11,7 +10,6 @@ import {
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import RegisterDto from './dto/register.dto';
 import { Auth } from './entity/auth.entity';
 import JwtAuthenticationGuard from './jwt-authentication.guard';
 import { LocalAuthGuard } from './local.auth.guard';
@@ -33,7 +31,6 @@ export class AuthController {
     const { user } = request;
     const cookie = this.authService.getCookieWithJwtToken(user.id);
     response.setHeader('Set-Cookie', cookie);
-
     user.password = undefined;
     return response.send(user);
   }
