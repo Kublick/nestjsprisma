@@ -11,9 +11,10 @@ async function bootstrap() {
     .setTitle('Prisma NestJs example')
     .setDescription('Basic Crud')
     .setVersion('1.0')
-    .addBasicAuth()
     .addBearerAuth()
+    .addCookieAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document, { customSiteTitle: 'JJ Api' });
 

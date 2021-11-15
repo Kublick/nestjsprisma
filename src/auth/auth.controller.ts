@@ -1,21 +1,19 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Req,
-  Request,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 import RegisterDto from './dto/register.dto';
 import { Auth } from './entity/auth.entity';
+import JwtAuthenticationGuard from './jwt-authentication.guard';
 import { LocalAuthGuard } from './local.auth.guard';
 import RequestWithUser from './requestWithUser.interface';
 
@@ -23,13 +21,12 @@ import RequestWithUser from './requestWithUser.interface';
 //Api Tags divides Swagger documentation into logical sections
 @ApiTags('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
+  // JwtGuard will require that users has a cookie with a valid JWT
   @Post('register')
-  async register(@Body() registrationData: RegisterDto, @Request() req) {
+  @UseGuards(JwtAuthenticationGuard)
+  async register(@Body() registrationData: RegisterDto) {
     return this.authService.register(registrationData);
   }
   //Local Auth Guard requires only email and password to add into the request object
@@ -42,7 +39,16 @@ export class AuthController {
     const { user } = request;
     const cookie = this.authService.getCookieWithJwtToken(user.id);
     response.setHeader('Set-Cookie', cookie);
+
     user.password = undefined;
     return response.send(user);
+  }
+
+  @UseGuards(JwtAuthenticationGuard)
+  @Get()
+  authenticate(@Req() request: RequestWithUser) {
+    const user = request.user;
+    user.password = undefined;
+    return user;
   }
 }
