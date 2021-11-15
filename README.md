@@ -1,11 +1,27 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) framework TypeScript with [Prisma](https://www.prisma.io) ORM.
 
 ## Installation
 
 ```bash
 $ npm install
+```
+
+## Preparing the database
+
+```bash
+# Start Postgres Database
+$ docker--compose up -d
+
+# run migrations
+$ npx prisma migrate dev
+
+# Seed database
+$ npm run seed
+
+#Check database contents
+$ npx prisma studio
 ```
 
 ## Running the app
@@ -21,15 +37,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Swagger module
+[Swagger](http://localhost:3000/api)
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```

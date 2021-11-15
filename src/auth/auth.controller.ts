@@ -23,12 +23,6 @@ import RequestWithUser from './requestWithUser.interface';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // JwtGuard will require that users has a cookie with a valid JWT
-  @Post('register')
-  @UseGuards(JwtAuthenticationGuard)
-  async register(@Body() registrationData: RegisterDto) {
-    return this.authService.register(registrationData);
-  }
   //Local Auth Guard requires only email and password to add into the request object
   //Http code returns 200 if user is authenticated
   @ApiOkResponse({ type: Auth })

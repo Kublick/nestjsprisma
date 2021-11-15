@@ -1,8 +1,19 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Post,
+} from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
+import JwtAuthenticationGuard from 'src/auth/jwt-authentication.guard';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -13,6 +24,13 @@ export class UsersController {
   @ApiOkResponse({ type: UserEntity })
   findAll() {
     return this.usersService.findAll();
+  }
+
+  // JwtGuard will require that users has a cookie with a valid JWT
+  @Post('create')
+  @UseGuards(JwtAuthenticationGuard)
+  async register(@Body() registrationData: CreateUserDto) {
+    return this.usersService.register(registrationData);
   }
 
   @Get(':id')

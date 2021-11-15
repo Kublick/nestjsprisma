@@ -21,26 +21,6 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async register(registrationData: RegisterDto) {
-    const hashedPassword = await bcrypt.hash(registrationData.password, 10);
-    try {
-      const createdUser = await this.prismaService.user.create({
-        data: {
-          ...registrationData,
-          password: hashedPassword,
-        },
-      });
-      return createdUser;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new BadRequestException('User with that email already exists');
-        }
-      }
-      throw new BadRequestException('Something went wrong');
-    }
-  }
-
   public async getAuthenticatedUser(email: string, plainTextPassword: string) {
     try {
       const user = await this.usersService.findByEmail(email);
@@ -82,7 +62,6 @@ export class AuthService {
 
   public getCookieWithJwtToken(userId: string) {
     const payload: TokenPayload = { userId };
-
     const token = this.jwtService.sign(payload);
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=6000`;
   }
