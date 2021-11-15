@@ -1,8 +1,8 @@
 import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {

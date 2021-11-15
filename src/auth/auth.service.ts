@@ -11,6 +11,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { Auth } from './entity/auth.entity';
 import { Prisma } from '@prisma/client';
+import TokenPayload from './tokenPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -77,5 +78,12 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign({ userId: user.id }),
     };
+  }
+
+  public getCookieWithJwtToken(userId: string) {
+    const payload: TokenPayload = { userId };
+
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=6000`;
   }
 }
