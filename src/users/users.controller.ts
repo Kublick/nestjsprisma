@@ -7,8 +7,6 @@ import {
   Delete,
   UseGuards,
   Post,
-  ClassSerializerInterceptor,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
@@ -18,7 +16,6 @@ import JwtAuthenticationGuard from 'src/auth/jwt-authentication.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
-@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

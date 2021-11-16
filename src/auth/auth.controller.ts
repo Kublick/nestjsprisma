@@ -1,14 +1,13 @@
 import {
-  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpCode,
   Post,
   Req,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { response } from 'express';
 import { AuthService } from './auth.service';
 import { Auth } from './entity/auth.entity';
 import JwtAuthenticationGuard from './jwt-authentication.guard';
@@ -16,7 +15,6 @@ import { LocalAuthGuard } from './local.auth.guard';
 import RequestWithUser from './requestWithUser.interface';
 
 @Controller('auth')
-@UseInterceptors(ClassSerializerInterceptor)
 //Api Tags divides Swagger documentation into logical sections
 @ApiTags('auth')
 export class AuthController {
@@ -42,5 +40,13 @@ export class AuthController {
     const user = request.user;
     user.password = undefined;
     return user;
+  }
+
+  @UseGuards(JwtAuthenticationGuard)
+  @HttpCode(200)
+  @Post('logout')
+  async logOut(@Req() request: RequestWithUser) {
+    request.res.setHeader('Set-Cookie', this.authService.getCookieForLogOut());
+    return;
   }
 }
