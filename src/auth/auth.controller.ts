@@ -1,14 +1,14 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpCode,
   Post,
   Req,
-  Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { Auth } from './entity/auth.entity';
 import JwtAuthenticationGuard from './jwt-authentication.guard';
@@ -16,6 +16,7 @@ import { LocalAuthGuard } from './local.auth.guard';
 import RequestWithUser from './requestWithUser.interface';
 
 @Controller('auth')
+@UseInterceptors(ClassSerializerInterceptor)
 //Api Tags divides Swagger documentation into logical sections
 @ApiTags('auth')
 export class AuthController {
@@ -27,12 +28,12 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
+  async logIn(@Req() request: RequestWithUser) {
     const { user } = request;
     const cookie = this.authService.getCookieWithJwtToken(user.id);
-    response.setHeader('Set-Cookie', cookie);
+    request.res.setHeader('Set-Cookie', cookie);
     user.password = undefined;
-    return response.send(user);
+    return user;
   }
 
   @UseGuards(JwtAuthenticationGuard)
