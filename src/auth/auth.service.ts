@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { Auth } from './entity/auth.entity';
 import TokenPayload from './tokenPayload.interface';
@@ -15,7 +14,6 @@ import TokenPayload from './tokenPayload.interface';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -53,6 +51,7 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
     return {
       accessToken: this.jwtService.sign({ userId: user.id }),
     };
@@ -61,7 +60,7 @@ export class AuthService {
   public getCookieWithJwtToken(userId: string) {
     const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=6000`;
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=14400`;
   }
 
   public getCookieForLogOut() {

@@ -44,7 +44,6 @@ export class UsersService {
     const find = await this.prismaService.user.findUnique({
       where: { email: email },
     });
-    console.log(find);
     if (!find) {
       throw new UnauthorizedException('user with this email doesnt exist');
     }
