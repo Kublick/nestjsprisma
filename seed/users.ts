@@ -5,13 +5,17 @@ export const users = [
     password: 'admin',
     name: 'admin',
     lastName: 'Doe',
-    role: 'admin',
   },
   {
     email: 'test@test.com',
     password: 'Testing01!',
     name: 'test',
     lastName: 'tester',
-    role: 'tester',
+  },
+  {
+    email: 'newtest@test.com',
+    password: 'Testing01!',
+    name: 'new test',
+    lastName: 'new tester',
   },
 ];

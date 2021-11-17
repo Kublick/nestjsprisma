@@ -23,5 +23,5 @@ export class CreateUserDto {
   @IsString()
   lastName: string;
   @ApiProperty()
-  role: string;
+  roleId: string;
 }

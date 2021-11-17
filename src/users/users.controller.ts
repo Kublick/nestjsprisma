@@ -30,7 +30,7 @@ export class UsersController {
 
   // JwtGuard will require that users has a cookie with a valid JWT
   @Post('create')
-  @UseGuards(JwtAuthenticationGuard)
+  // @UseGuards(JwtAuthenticationGuard)
   @ApiOkResponse({ type: UserEntity })
   async register(@Body() registrationData: CreateUserDto) {
     return this.usersService.register(registrationData);
@@ -39,7 +39,7 @@ export class UsersController {
   //In order to serialize data to JSON, we need to use the ClassSerializerInterceptor
   // An return the Entity with the function findOne
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<UserEntity> {
     return new UserEntity(await this.usersService.findOne(id));
   }
 
