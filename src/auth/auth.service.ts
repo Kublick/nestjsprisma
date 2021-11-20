@@ -66,4 +66,8 @@ export class AuthService {
   public getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
   }
+
+  // async findAllPermissionsOfUser(user: User): Promise<Permissions[]> {
+  //   return await this.usersService.findAllPermissions(user);
+  // }
 }

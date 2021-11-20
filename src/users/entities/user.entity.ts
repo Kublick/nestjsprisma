@@ -28,6 +28,9 @@ export class UserEntity implements User {
   @ApiProperty()
   roleId: string;
 
+  @ApiProperty()
+  isAdmin: boolean;
+
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
   }

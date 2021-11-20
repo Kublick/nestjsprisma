@@ -3,7 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -56,5 +56,9 @@ export class UsersService {
 
   remove(id: string) {
     return this.prismaService.user.delete({ where: { id: id } });
+  }
+
+  findAllPermissions(user: User) {
+    return this.prismaService.user.findMany();
   }
 }

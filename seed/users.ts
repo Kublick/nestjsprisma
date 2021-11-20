@@ -5,6 +5,7 @@ export const users = [
     password: 'admin',
     name: 'admin',
     lastName: 'Doe',
+    isAdmin: true,
   },
   {
     email: 'test@test.com',

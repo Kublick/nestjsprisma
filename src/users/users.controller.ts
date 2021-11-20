@@ -14,6 +14,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import JwtAuthenticationGuard from 'src/auth/jwt-authentication.guard';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LocalAuthGuard } from 'src/auth/local.auth.guard';
+import { PoliciesGuard } from 'src/casl/policies.guard';
+import { CheckPolicies } from 'src/casl/checkPoliciy.decorator';
+import { AppAbility } from 'src/casl/casl-ability.factory';
+import { Action } from 'src/casl/action.enum';
+import { Article } from './article.entity';
 
 @Controller('users')
 export class UsersController {
@@ -23,6 +29,9 @@ export class UsersController {
   // ApiOkResponse formats swagger shcema response and expected return values
   // for an array we need to map the result then apply the serializer to the result
   @ApiOkResponse({ type: UserEntity })
+  @UseGuards(PoliciesGuard)
+  @UseGuards(JwtAuthenticationGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, Article))
   async findAll(): Promise<UserEntity[]> {
     const users = await this.usersService.findAll();
     return users.map((user) => new UserEntity(user));
@@ -51,5 +60,13 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('me')
+  getUserPermissions(@Body() user: UserEntity) {
+    console.log('el user', user);
+    return this.usersService.findAllPermissions(user);
   }
 }
