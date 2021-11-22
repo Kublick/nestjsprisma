@@ -7,6 +7,8 @@ import {
   Delete,
   UseGuards,
   Post,
+  Res,
+  Req,
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
@@ -14,12 +16,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import JwtAuthenticationGuard from 'src/auth/jwt-authentication.guard';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/checkPoliciy.decorator';
 import { AppAbility } from 'src/casl/casl-ability.factory';
 import { Action } from 'src/casl/action.enum';
-import { Article } from './article.entity';
+import RequestWithUser from 'src/auth/requestWithUser.interface';
 
 @Controller('users')
 export class UsersController {
@@ -31,14 +32,23 @@ export class UsersController {
   @ApiOkResponse({ type: UserEntity })
   @UseGuards(PoliciesGuard)
   @UseGuards(JwtAuthenticationGuard)
-  @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, Article))
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, UserEntity))
   async findAll(): Promise<UserEntity[]> {
     const users = await this.usersService.findAll();
     return users.map((user) => new UserEntity(user));
   }
 
   // JwtGuard will require that users has a cookie with a valid JWT
+  // PolicesGuard is a claims based guard, configured in CASL module
+  // CheckPolicies decorator will check if the user has the required permissions
+  // both have to be present to allow the request to be processed
   @Post('create')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, UserEntity),
+  )
+  @UseGuards(JwtAuthenticationGuard)
+
   // @UseGuards(JwtAuthenticationGuard)
   @ApiOkResponse({ type: UserEntity })
   async register(@Body() registrationData: CreateUserDto) {
@@ -60,13 +70,5 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
-  }
-
-  @UseGuards(LocalAuthGuard)
-  @UseGuards(JwtAuthenticationGuard)
-  @Get('me')
-  getUserPermissions(@Body() user: UserEntity) {
-    console.log('el user', user);
-    return this.usersService.findAllPermissions(user);
   }
 }

@@ -36,6 +36,7 @@ export class UsersService {
           throw new BadRequestException('User with that email already exists');
         }
       }
+
       throw new BadRequestException('Something went wrong');
     }
   }
@@ -56,9 +57,5 @@ export class UsersService {
 
   remove(id: string) {
     return this.prismaService.user.delete({ where: { id: id } });
-  }
-
-  findAllPermissions(user: User) {
-    return this.prismaService.user.findMany();
   }
 }

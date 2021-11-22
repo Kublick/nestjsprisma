@@ -34,7 +34,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthenticationGuard)
-  @Get()
+  @Get('me')
   authenticate(@Req() request: RequestWithUser) {
     const user = request.user;
     user.password = undefined;
