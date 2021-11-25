@@ -6,7 +6,6 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Action } from './action.enum';
 
