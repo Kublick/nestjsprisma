@@ -3,7 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -36,6 +36,7 @@ export class UsersService {
           throw new BadRequestException('User with that email already exists');
         }
       }
+
       throw new BadRequestException('Something went wrong');
     }
   }
