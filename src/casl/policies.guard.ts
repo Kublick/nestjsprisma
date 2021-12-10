@@ -4,12 +4,14 @@ import { AppAbility, CaslAbilityFactory } from './casl-ability.factory';
 import { CHECK_POLICIES_KEY } from './checkPoliciy.decorator';
 import { PolicyHandler } from './ipolicy.interface';
 import RequestWithUser from '../auth/requestWithUser.interface';
+import { CaslPrismaAbilityFactory } from './casl-prisma-ability';
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private caslAbilityFactory: CaslAbilityFactory,
+    private caslPrismaAbilityFactory: CaslPrismaAbilityFactory,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -22,7 +24,15 @@ export class PoliciesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
 
+    console.log(user);
+
     const ability = this.caslAbilityFactory.createForUser(user);
+
+    console.log(ability);
+
+    const ability2 = await this.caslPrismaAbilityFactory.create(user);
+
+    console.log(ability2);
 
     return policyHandlers.every((handler) =>
       this.execPolicyHandler(handler, ability),

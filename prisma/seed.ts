@@ -5,11 +5,25 @@ import { roles } from '../seed/roles';
 
 const prisma = new PrismaClient();
 
+const data = [
+  { action: 'read', subject: 'User' },
+  {
+    action: 'manage',
+    subject: 'User',
+    conditions: { authorId: '${user.id}' },
+  },
+  {
+    action: 'update',
+    subject: 'User',
+  },
+];
+
 async function main() {
   for (const role of roles) {
     await prisma.role.create({
       data: {
         name: role.name,
+        permissions: data,
       },
     });
   }

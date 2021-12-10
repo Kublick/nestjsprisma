@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["filterJson"]
 }
 
 datasource db {
@@ -26,36 +27,39 @@ model User {
 // Role is a model with a relation to User
 
 model Role {
-  id                 String            @id @default(cuid())
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  name               String            @unique
-  User               User[]
-  Role_Permissions   Role_Permissions? @relation(fields: [role_PermissionsId], references: [id])
-  role_PermissionsId String?
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  User        User[]
+  permissions Json?
+
+  // Role_Permissions   Role_Permissions? @relation(fields: [role_PermissionsId], references: [id])
+  // role_PermissionsId String?
 }
 
 // Role_perimissions is a model with a relation to Role
 
-model Role_Permissions {
-  id            String       @id @default(cuid())
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  name          String       @unique
-  Role          Role[]
-  Permissions   Permissions? @relation(fields: [permissionsId], references: [id])
-  permissionsId String?
-}
+// model Role_Permissions {
+//   id            String       @id @default(cuid())
+//   createdAt     DateTime     @default(now())
+//   updatedAt     DateTime     @updatedAt
+//   name          String       @unique
+//   Role          Role[]
+//   Permissions   Permissions? @relation(fields: [permissionsId], references: [id])
+//   permissionsId String?
+// }
 
 // permissions is a model with a relation to Role_Permissions
 
-model Permissions {
-  id               String             @id @default(cuid())
-  name             String             @unique
-  Role_Permissions Role_Permissions[]
-  // Objects          Objects?           @relation(fields: [objectsId], references: [id])
-  // objectsId        String?
-}
+// model Permissions {
+//   id               String             @id @default(cuid())
+//   name             String             @unique
+//   Role_Permissions Role_Permissions[]
+//   Permissions      Permissions[]
+// Objects          Objects?           @relation(fields: [objectsId], references: [id])
+// objectsId        String?
+// }
 
 // Objects is a model with a relation to Permissions
 

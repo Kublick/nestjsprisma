@@ -58,4 +58,10 @@ export class UsersService {
   remove(id: string) {
     return this.prismaService.user.delete({ where: { id: id } });
   }
+  async findAllPermissions(user: User) {
+    return await this.prismaService.user.findFirst({
+      where: { id: user.id },
+      include: { role: true },
+    });
+  }
 }

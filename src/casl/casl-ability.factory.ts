@@ -27,9 +27,11 @@ export class CaslAbilityFactory {
       cannot(Action.Create, 'all');
     }
 
-    return build({
+    const theAbility = build({
       detectSubjectType: (item) =>
         item.constructor as ExtractSubjectType<Subjects>,
     });
+
+    return theAbility;
   }
 }

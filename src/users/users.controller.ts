@@ -7,8 +7,6 @@ import {
   Delete,
   UseGuards,
   Post,
-  Res,
-  Req,
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
@@ -20,7 +18,6 @@ import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/checkPoliciy.decorator';
 import { AppAbility } from 'src/casl/casl-ability.factory';
 import { Action } from 'src/casl/action.enum';
-import RequestWithUser from 'src/auth/requestWithUser.interface';
 
 @Controller('users')
 export class UsersController {
